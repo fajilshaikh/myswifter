@@ -1,0 +1,12 @@
+/* pagination.component.css */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}

@@ -1,0 +1,18 @@
+<div *ngIf="message" class="modal" tabindex="-1" role="dialog" style="display:block!important; z-index:1100!important;">
+    <div class="modal-dialog modal-dialog-centered modal-md custom-alert" role="document">
+        <div class="modal-content" *ngIf="message?.type == 'confirm'">
+            <div class="modal-header">
+                <!-- <h1 class="modal-title" id="confirmmodal">Delete Record</h1> -->
+            </div>
+            <div class="modal-body text-center">
+                <h3>Are you sure?</h3>
+                <p class="confirm-message">{{message.text}}</p>
+            </div>
+            <div class="modal-footer pt-0">
+                <button type="button" class="btn btn-danger col me-3" data-bs-dismiss="modal"
+                    (click)="message.noFn()">no</button>
+                <button type="button" class="btn btn-success col" (click)="message.yesFn()">yes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="login_main">
+    <div class="row g-0 h-100">
+        <div class="col-md-6 lleftbox lboxes h-100">
+            <div class="lbox h-100">
+                <div class="loginimgbox"></div>
+            </div>
+        </div>
+        <div class="col-md-6 lrightbox lboxes h-100">
+            <div class="lbox h-100">
+                <div class="logobox">
+                    <img src="../../assets/images/logo.svg" alt="">
+                </div>
+                <div class="logintxtbox"></div>
+            </div>
+        </div>
+    </div>
+    <div class="lform h-100">
+        <div class="row align-items-center justify-content-center h-100">
+            <div class="col-md-4 lsiboxes text-center loginformicon">
+                <img class="img-fluid loginicon1" src="../../assets/images/loginicon1.png" alt="" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-3 lsiboxes loginformmain">
+                <div class="loginmain" [class.error]="IsPage === 1 && submitted && !this.loginForm.valid">
+                    <div class="logoboxmobile d-block d-md-none d-lg-none d-xl-none d-xxl-none">
+                        <img src="../../assets/images/logo.svg" alt="">
+                    </div>
+
+                    @if(IsPage === 1) {
+                    <div class="loginform">
+                        <div class="lptitlebox">
+                            <h2>Welcome to Swifter</h2>
+                            <h1>Sign in</h1>
+                            <h6>Enter your email & password to login</h6>
+                        </div>
+
+                        <form [formGroup]="loginForm" (ngSubmit)="login()">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" placeholder="Enter your email"
+                                    formControlName="email" [class.error]="submitted && email!.invalid" maxlength="100">
+                                <div *ngIf="submitted && email!.invalid" class="validation-message">Please enter a
+                                    valid email address.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pass" class="form-label">Password</label>
+                                <div class="inputwithicon">
+                                    <input [type]="fieldTextType ? 'text':'password'" class="form-control"
+                                        placeholder="*******" id="txtLoginPassword" formControlName="password"
+                                        maxlength="100" [class.error]="submitted && password!.invalid">
+                                    <span class="inputicon"
+                                        [ngClass]="{'sr-eye-icon': fieldTextType, 'sr-eye-line-icon': !fieldTextType}"
+                                        (click)="fieldTextType = !fieldTextType"></span>
+                                </div>
+                                <div *ngIf="submitted && password!.invalid" class="validation-message">Please
+                                    enter your password.</div>
+                            </div>
+
+                            <div class="lsabox signup-link-lgn">
+                                <div class="form-group mb-0">
+                                    <label class="cust-chk-bx d-inline-block pl-3">
+                                        <input class="chkRow" type="checkbox" autocomplete="off"
+                                            formControlName="rememberMe">Remember Me
+                                        <span class="cust-chkmark"></span>
+                                    </label>
+                                </div>
+                                <a [routerLink]="['/login']" [queryParams]="{ fg: '1' }">Forgot password?</a>
+                            </div>
+
+                            @if(submitted && loginForm.valid && LoginError) {
+                            <div class="error-message w-100 text-center pb-3">Invalid username or password</div>
+                            }
+
+                            <div class="form-group btnbox mb-0">
+                                <button type="submit" class="btn py-3 w-100">Login Now</button>
+                            </div>
+                        </form>
+                    </div>
+                    }@else if(IsPage === 2) {
+                    <div class="loginforgotform">
+                        <div class="lptitlebox">
+                            <h2>Welcome to Swifter</h2>
+                            <h1>Forgot Password</h1>
+                            <h6>To Recover Your Password Kindly Provide Your Email Id
+                                Given At The Time Of Registration</h6>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">Email Id</label>
+                                <input type="text" class="form-control" name="ForgetEmail" [(ngModel)]="ForgetEmail"
+                                    maxlength="100" placeholder="Enter your email Id"
+                                    [class.error]="ForgetSubmitted && !ForgetEmail">
+                                <div *ngIf="ForgetSubmitted && !ForgetEmail" class="validation-message">Please enter a
+                                    valid email address.</div>
+                            </div>
+                            <div class="lsabox signup-link-lgn justify-content-end">
+                                <a [routerLink]="['/login']">Back To Login</a>
+                            </div>
+                            <div class="form-group btnbox mb-0">
+                                <a href="javascript:void(0);" (click)="ForgetPassword()"
+                                    class="btn py-3 w-100">Submit</a>
+                            </div>
+                        </div>
+                    </div>
+                    }@else if(IsPage === 3) {
+                    <div class="loginform">
+                        <div class="lptitlebox">
+                            <h2>Welcome to Swifter</h2>
+                            <h1>Change Password</h1>
+                            <h6>Enter your New Password</h6>
+                        </div>
+                        <form [formGroup]="changePasswordForm">
+                            <div class="form-group">
+                                <label for="pass" class="form-label">New Password</label>
+                                <div class="inputwithicon">
+                                    <input [type]="fieldTextType ? 'text':'password'" class="form-control"
+                                        maxlength="100" placeholder="*******" formControlName="NewPassword"
+                                        [class.error]="submitted && changePasswordForm.get('NewPassword')?.invalid">
+                                    <span class="inputicon"
+                                        [ngClass]="{'sr-eye-icon': fieldTextType, 'sr-eye-line-icon': !fieldTextType}"
+                                        (click)="fieldTextType = !fieldTextType"></span>
+                                </div>
+                                <div *ngIf="submitted && changePasswordForm.get('NewPassword')?.hasError('required')"
+                                    class="validation-message">
+                                    New Password is required.
+                                </div>
+                                <div *ngIf="submitted && changePasswordForm.get('NewPassword')?.hasError('pattern')"
+                                    class="validation-message">
+                                    Your password
+                                    must contain at least one upper case letter , one digit and minimum 8 characters.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pass" class="form-label">Confirm Password</label>
+                                <div class="inputwithicon">
+                                    <input [type]="fieldTextType1 ? 'text' : 'password'" class="form-control"
+                                        maxlength="100" placeholder="*******" formControlName="ConfirmPassword"
+                                        (keydown)="preventSpaces($event)"
+                                        [class.error]="submitted && changePasswordForm.get('ConfirmPassword')?.invalid">
+                                    <span class="inputicon"
+                                        [ngClass]="{'sr-eye-icon': fieldTextType, 'sr-eye-line-icon': !fieldTextType}"
+                                        (click)="fieldTextType1 = !fieldTextType1"></span>
+                                </div>
+                                <div *ngIf="submitted && changePasswordForm.get('ConfirmPassword')?.hasError('required')"
+                                    class="validation-message">
+                                    Confirm Password is required.
+                                </div>
+                                <div *ngIf="submitted && changePasswordForm.get('ConfirmPassword')?.hasError('pattern')"
+                                    class="validation-message">
+                                    Your password
+                                    must contain at least one upper case letter , one digit and maximum 8 characters.
+                                </div>
+                                <div *ngIf="changePasswordForm.get('ConfirmPassword')?.hasError('matchingPasswords')"
+                                    class="validation-message">
+                                    The password you entered does not match.
+                                </div>
+                            </div>
+                            <div class="form-group btnbox mb-0">
+                                <button type="submit" class="btn py-3 w-100" (click)="changeForgotPassword()">Change
+                                    Password</button>
+                            </div>
+                        </form>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4 lsiboxes text-center loginformicon">
+                <img class="img-fluid loginicon2" src="../../assets/images/loginicon2.png" alt="" />
+            </div>
+        </div>
+    </div>
+</div>

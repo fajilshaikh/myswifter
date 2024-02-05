@@ -1,0 +1,119 @@
+<div class="wrapper wrapper-full-page">
+    <div class="sidebar">
+        <div class="sidebar-top-logo-icon">
+            <!-- <div class="d-flex align-items-center"> -->
+            <div class="logo_icon w-100">
+                <img src="../../assets/images/logo.svg" class="img-fluid" alt="" />
+            </div>
+            <!-- <div class="logo_text">
+                    <img src="images/logo.svg" class="img-fluid" alt="" />
+                </div> -->
+            <!-- </div> -->
+        </div>
+        <div class="sidebar-wrapper" data-simplebar>
+            <ul class="nav">
+                <li *ngFor="let item of menuItems" [class.active]="item.urls.includes(CurrentUrl)">
+                    <a [routerLink]="item.route">
+                        <img [src]="item.iconSrc" class="menu-list-icn">
+                        <p>{{ item.label }}</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="sidebar_bottom">
+            <div class="sidebar-img-section">
+                <div class="sidebar-img-content">
+                    <div class="d-flex align-items-center sismedia">
+                        <div class="flex-shrink-0 sisicon">
+                            <img [src]="UserLogin.ProfileImage || '../../assets/images/User-Image.png'" alt="...">
+                        </div>
+                        <div class="flex-grow-1 siscon">
+                            <div class="siscon_inner">
+                                <div class="sis_data flex-shrink-0">
+                                    <h3>{{UserLogin.EmployeeName}}</h3>
+                                    <h6>{{UserLogin.RoleName}}</h6>
+                                </div>
+                                <div class="sis_icon flex-grow-1">
+                                    <a routerLink="/login"><i class="fa-regular fa-power-off"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-minimize deskt-toggle-icon">
+                <div id="minimizeSidebar" (click)="toggleSidebar()">
+                    <img src="../../assets/images/sidemenu-toggle-icon.png" class="img-fluid menu-toggle-icn" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-panel">
+        <div class="container-fluid header-main-fix">
+            <div class="hmf_inner d-flex align-items-center">
+                <div class="navbar-wrapper mobile-toggle-icon">
+                    <div class="navbar-toggle" (click)="toggleNavbar()">
+                        <img src="../../assets/images/sidemenu-toggle-icon.png" class="menu-toggle-icn" />
+                    </div>
+                </div>
+                <div class="page-header-name" *ngIf="tabs.length > 0">
+                    <div class="tabs">
+                        <a *ngFor="let tab of tabs" class="tab" [class.active]="isActive(tab)" [routerLink]="tab.route">
+                            {{ tab.label }}
+                        </a>
+                        <!-- <a class="tab active" routerLink="/company">Company</a>
+                        <a class="tab" routerLink="/category">Category</a>
+                        <a class="tab" href="javascript:void(0);">Brand</a>
+                        <a class="tab" href="javascript:void(0);">Employee</a>
+                        <a class="tab" href="javascript:void(0);">Role</a>
+                        <a class="tab" href="javascript:void(0);">Parameter Types</a>
+                        <a class="tab" href="javascript:void(0);">Parameters Values</a>
+                        <a class="tab" href="javascript:void(0);">Discounts</a> -->
+                    </div>
+                    <ng-select id="tab-select" class="customselect tab-select" [clearable]="false"
+                        [(ngModel)]="selectedPage" [searchable]="false" (change)="onDropdownChange($event)">
+                        <ng-option value="">Select Your Page</ng-option>
+                        <ng-option *ngFor="let Page of tabs" [value]="Page.route">{{Page.label}}</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="header-rght-side" [ngClass]="{'visible': isHeaderVisible}">
+                <a href="javascript:void(0);" class="head_notific">
+                    <i class="sr-ball-icon"></i>
+                </a>
+                <div class="header-user-profile">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle w-auto d-flex align-items-center" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="header-user-profile-inner">
+                                <img [src]="UserLogin.ProfileImage || '../../assets/images/User-Image.png'" alt="...">
+                                <div class="pro_info">
+                                    <span>{{UserLogin.EmployeeName}}</span>
+                                    <h6>{{UserLogin.RoleName}}</h6>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu header-dropdown-with-icn">
+                            <a class="dropdown-item" routerLink="/myprofile">
+                                My Profile
+                            </a>
+                            <a class="dropdown-item" routerLink="/change-password">
+                                Change Password
+                            </a>
+                            <a class="dropdown-item" href="javascript:void(0);" (click)="Logout()">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-toggler-right" (click)="toggleHeader()">
+                <i class="menu-list-icn fa-solid fa-ellipsis-vertical"></i>
+            </div>
+        </div>
+
+        <div class="fitscreen-height-main">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

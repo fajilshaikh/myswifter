@@ -1,0 +1,523 @@
+<div class="tbutton_icongroup">
+    <div class="src-rest-topbtn justify-content-between mb-0">
+        <div class="page_name_title">
+            <h1>Party</h1>
+        </div>
+        <div class="tbr_box d-flex align-items-center">
+            <div class=" cart-status-color-bottom">
+                <ul>
+                    <li class="status-available">
+                        <span class="my-cart-status"></span>Active
+                    </li>
+                    <li class="status-hold">
+                        <span class="my-cart-status"></span>Inactive
+                    </li>
+                </ul>
+            </div>
+            <div class="pheadbtnboxes d-flex align-items-center justify-content-end">
+                <ul class="d-flex search-result-btn-scroll justify-content-end">
+                    <li class="col-auto">
+                        <a class="btn" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addnew">
+                            <i class="sr-plus-icon"></i>
+                            <span>Add New</span>
+                        </a>
+                    </li>
+                    <li class="col-auto">
+                        <a class="iconbox position-relative" href="javascript:void(0);" data-bs-toggle="offcanvas"
+                            data-bs-target="#filtterM" aria-controls="filtterM">
+                            <i class="sr-filtter-icon"></i>
+                            <span class="fcount">{{ CountAppliedFilters() }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="datatablemain w-100">
+    @defer {
+    <div class="table-responsive" *ngIf="GetCustomerList && GetCustomerList.length > 0">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Company</th>
+                    <th>Outlet</th>
+                    <th>Party Type</th>
+                    <th>Email Id</th>
+                    <th>Mobile No</th>
+                    <th>GSTIN</th>
+                    <th>Pan No</th>
+                    <th>Status</th>
+                    <th>Entry By</th>
+                    <th>Entry Date Time</th>
+                    <th>Update By</th>
+                    <th>Update Date Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of GetCustomerList">
+                    <td>
+                        <div class="tactionicon">
+                            <ul class="d-flex justify-content-center">
+                                <li>
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addnew"
+                                        (click)="EditDialog(item)">
+                                        <i class="sr-edit-icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" (click)="DeleteCustomer(item.CustomerId)">
+                                        <i class="sr-delete-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>{{item.FirstName}}</td>
+                    <td>{{item.LastName}}</td>
+                    <td>{{item.Company||'-'}}</td>
+                    <td>{{item.Outlet||'-'}}</td>
+                    <td *ngIf="item.CustomerType=='vendor'"><span class="tbtn btn-vendor">Vender</span></td>
+                    <td *ngIf="item.CustomerType=='customer'"><span class="tbtn btn-customer">Customer</span></td>
+                    <td *ngIf="item.CustomerType=='supplier'"><span class="tbtn btn-supplier">Supplier</span></td>
+                    <td>{{item.Email||'-'}}</td>
+                    <td>+{{item.MobileCode}} {{item.MobileNo||'-'}}</td>
+                    <td>{{item.GSTIN||'-'}}</td>
+                    <td>{{item.PANNO||'-'}}</td>
+                    <td *ngIf="item.Status=='1'"><span class="tbtn btn-success">A</span></td>
+                    <td *ngIf="item.Status=='0'"><span class="tbtn btn-danger">I</span></td>
+                    <td>{{item.EntryBy||'-'}}</td>
+                    <td>{{item.EntryDateTime||'-'}}</td>
+                    <td>{{item.UpdateBy||'-'}}</td>
+                    <td>{{item.UpdateDatetime||'-'}}</td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </div>
+    }
+    @placeholder () {
+    <app-table-placeholder *ngIf="!GetCustomerList || GetCustomerList?.length === 0"></app-table-placeholder>
+    }
+    <div class="nodata" *ngIf="IsPageFullyLoad && GetCustomerList?.length === 0">
+        <div class="nodata_inner h-100">
+            <div class="d-flex text-center align-items-center justify-content-center h-100">
+                <span>
+                    <div class="icon_main w-100 mb-3">
+                        <img src="../../assets/images/no-data.svg" alt="">
+                    </div>
+                    <h1>No Record Found</h1>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <app-pagination [CurrentPage]="CurrentPage" [TotalPage]="TotalPage" [PerPage]="PerPage" [TotalRecord]="TotalRecord"
+        (onPageChanges)="OnPagenation($event)" (PerPageSet)="PerPageValueSet($event)"></app-pagination>
+</div>
+
+<form class="offcanvas offcanvas-end" tabindex="-1" id="filtterM" aria-labelledby="filtterMLabel" (submit)="GetCustomerData()">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="filtterMLabel">Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" >
+            <i class="sr-close-icon"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- <div class="form-group">
+            <label for="" class="form-label">Outlet</label>
+            <input type="text" class="form-control" id="" placeholder="Enter Outlet"
+                [(ngModel)]="FilterData.Outlet">
+        </div> -->
+        <div class="form-group">
+            <label for="" class="form-label">First Name</label>
+            <input appNospaceFirst type="text" class="form-control" name="FirstName" id="" placeholder="Enter First Name"
+                [(ngModel)]="FilterData.FirstName">
+        </div>
+        <div class="form-group">
+            <label for="" class="form-label">Last Name</label>
+            <input appNospaceFirst type="text" class="form-control" name="LastName" id="" placeholder="Enter last Name"
+                [(ngModel)]="FilterData.LastName">
+        </div>
+        <div class="form-group">
+            <label  for="" class="form-label">Email</label>
+            <input  appNospaceFirst type="text" class="form-control" id="" name="Email" placeholder="Enter  email" [(ngModel)]="FilterData.Email">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Mobile No</label>
+
+
+            <input type="text" appNospaceFirst class="form-control required OnlyNumber" name="mobile_c" placeholder="Enter Phone Number"
+                autocomplete="off" [(ngModel)]="FilterData.MobileNo" name="MobileNo">
+
+        </div>
+        <div class="form-group">
+            <label for="" class="form-label">Party Type</label>
+            <ng-select class="customselect" appendTo="body" [clearable]="false" name="ctrtyp"
+                placeholder="Select Party type" [(ngModel)]="FilterData.CustomerType">
+                <ng-option value="">Select Party Type</ng-option>
+                <ng-option *ngFor="let ctrtyp  of customertype" [value]="ctrtyp.name">{{ctrtyp.name}}</ng-option>
+            </ng-select>
+
+        </div>
+
+        <div class="form-group">
+            <label for="" class="form-label">Status</label>
+            <ng-select class="customselect" [clearable]="false" name="status" placeholder="Select Status"
+                [(ngModel)]="FilterData.Status">
+                <ng-option value="">Select Status</ng-option>
+                <ng-option value="1">Active</ng-option>
+                <ng-option value="0">Inactive</ng-option>
+            </ng-select>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-border col" data-bs-dismiss="offcanvas" (click)="ClearFilter()">Reset</button>
+        <button type="submit" class="btn btn-border col" data-bs-dismiss="offcanvas"  >Apply</button>
+    </div>
+</form>
+
+<!-- Modal -->
+<form [formGroup]="CustomerForm" class="modal fade" id="addnew" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" autocomplete="off">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="exampleModalLabel">{{FormHeading}} Party</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closemodel()">
+                    <i class="sr-close-icon"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row grid2input">
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="catnm" class="form-label">First Name<span class="text-danger">*</span></label>
+                            <input type="text" appNospaceFirst class="form-control" id="catnm" placeholder="Enter First Name"
+                                formControlName="firstName"
+                                [class.is-invalid]="CustomerForm.controls['firstName'].invalid && (CustomerForm.controls['firstName'].dirty || CustomerForm.controls['firstName'].touched)">
+                            <div *ngIf="CustomerForm.controls['firstName'].invalid && (CustomerForm.controls['firstName'].dirty || CustomerForm.controls['firstName'].touched)"
+                                class="text-danger">
+                                <div *ngIf="CustomerForm.controls['firstName'].errors?.['required']">First Name is
+                                    required
+                                </div>
+                                <div *ngIf="CustomerForm.controls['firstName'].errors?.['pattern']">First Name should
+                                    contain
+                                    only alphabetical characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="catnm" class="form-label">Last Name<span class="text-danger">*</span></label>
+                            <input type="text"  appNospaceFirst class="form-control" id="catnm" placeholder="Enter last Name"
+                                formControlName="lastName"
+                                [class.is-invalid]="CustomerForm.controls['lastName'].invalid && (CustomerForm.controls['lastName'].dirty || CustomerForm.controls['lastName'].touched)">
+                            <div *ngIf="CustomerForm.controls['lastName'].invalid && (CustomerForm.controls['lastName'].dirty || CustomerForm.controls['lastName'].touched)"
+                                class="text-danger">
+                                <div *ngIf="CustomerForm.controls['lastName'].errors?.['required']">Last Name is
+                                    required
+                                </div>
+                                <div *ngIf="CustomerForm.controls['lastName'].errors?.['pattern']">Last Name should
+                                    contain
+                                    only alphabetical characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="" class="form-label">Party Type<span class="text-danger">*</span></label>
+                            <ng-select class="customselect" appendTo="body" [clearable]="false" name="ctrtyp"
+                                formControlName="customerType" placeholder="Select Party type"
+                                [class.is-invalid]="CustomerForm.controls['customerType'].invalid && (CustomerForm.controls['customerType'].dirty || CustomerForm.controls['customerType'].touched)">
+                                <ng-option value="">Select Party Type</ng-option>
+                                
+                                <ng-option style="color: black;" *ngFor="let ctrtyp  of customertype"
+                                    [value]="ctrtyp.name">{{ctrtyp.name}}</ng-option>
+                            </ng-select>
+                            <div *ngIf="CustomerForm.controls['customerType'].invalid && (CustomerForm.controls['customerType'].dirty || CustomerForm.controls['customerType'].touched)"
+                                class="text-danger">
+                                <div *ngIf="CustomerForm.controls['customerType'].errors?.['required']">Customer Type is
+                                    required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="catdsc" class="form-label">Email Id<span class="text-danger">*</span></label>
+                            <input type="text" appNospaceFirst class="form-control" id="catdsc" placeholder="Enter Email Id"
+                                formControlName="emailid"
+                                [class.is-invalid]="CustomerForm.controls['emailid'].invalid && (CustomerForm.controls['emailid'].dirty || CustomerForm.controls['emailid'].touched)">
+                            <div *ngIf="CustomerForm.controls['emailid'].invalid && (CustomerForm.controls['emailid'].dirty || CustomerForm.controls['emailid'].touched)"
+                                class="text-danger">
+                                <div *ngIf="CustomerForm.controls['emailid'].errors?.['required']">Email Id is
+                                    required
+                                </div>
+                                <div *ngIf="CustomerForm.controls['emailid'].errors?.['pattern']">Invaild Email Format
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="adrs" class="form-label">Mobile No<span class="text-danger">*</span></label>
+                            <div class="row align-items-center g-0">
+                                <div class="phonebox col-auto">
+                                    <ng-select class="customselect" [clearable]="false" name="mono"
+                                        formControlName="countryCode"
+                                        [class.is-invalid]="CustomerForm.controls['countryCode'].invalid && (CustomerForm.controls['countryCode'].dirty || CustomerForm.controls['countryCode'].touched)">
+                                        <!-- <ng-option value="" [disabled]="true">+91</ng-option> -->
+                                        <ng-option *ngFor="let item  of CountyList"
+                                            value="{{item.PhoneCode}}">+{{item.PhoneCode}}</ng-option>
+                                    </ng-select>
+                                </div>
+                                <div class="phoneboxinput col ps-3">
+                                    <input  appNospaceFirst type="text" class="form-control required OnlyNumber" name="mobile_c"
+                                        placeholder="Enter Phone Number" autocomplete="off" formControlName="mobileNo"
+                                        [maxlength]="10" (keypress)="PressNumber($event)"
+                                        [class.is-invalid]="CustomerForm.controls['mobileNo'].invalid && (CustomerForm.controls['mobileNo'].dirty || CustomerForm.controls['mobileNo'].touched)">
+                                </div>
+                                <div *ngIf="CustomerForm.controls['mobileNo'].invalid && (CustomerForm.controls['mobileNo'].dirty || CustomerForm.controls['mobileNo'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="CustomerForm.controls['mobileNo'].errors?.['required']">Mobile
+                                        Number is
+                                        required
+                                    </div>
+                                    <div *ngIf="CustomerForm.controls['mobileNo'].errors?.['pattern']">Please enter
+                                        a valid 10-digit mobile number.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="catdsc" class="form-label">GSTIN</label>
+                            <input type="text" class="form-control" id="catdsc" appNospaceFirst placeholder="Enter GSTIN"
+                                formControlName="gstNo">
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="catdsc" class="form-label">Pan No</label>
+                            <input type="text" class="form-control" id="catdsc" appNospaceFirst placeholder="Enter Pan No"
+                                formControlName="panNo">
+                        </div>
+                    </div>
+                    <div class="col-md-6 inputboxes">
+                        <div class="form-group">
+                            <label for="eid" class="form-label">Status</label>
+                            <label class="cust-chk-bx d-inline-block pl-3">
+                                <input id="active" type="checkbox" autocomplete="off" checked
+                                    formControlName="Status">active
+                                <span class="cust-chkmark"></span>
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 titlewithinput d-flex align-items-center mb-3">
+                        <h2 class="modal-title" id="exampleModalLabel">Address Information</h2>
+
+                    </div>
+                    <div [formGroup]="AddressDetailsForm" class="row grid2input">
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="" class="form-label">Country<span class="text-danger">*</span></label>
+                                <ng-select class="customselect" [clearable]="false" (change)="oncountryselect($event)"
+                                    formControlName="selectedCountry" placeholder="Select Country"
+                                    [class.is-invalid]="AddressDetailsForm.controls['selectedCountry'].invalid && (AddressDetailsForm.controls['selectedCountry'].dirty || AddressDetailsForm.controls['selectedCountry'].touched)">
+                                    <ng-option value="">Select Country</ng-option>
+                                    <ng-option *ngFor="let item  of CountyList"
+                                        [value]="item.CountryId">{{item.CountryName}}</ng-option>
+                                </ng-select>
+                                <div *ngIf="AddressDetailsForm.controls['selectedCountry'].invalid && (AddressDetailsForm.controls['selectedCountry'].dirty || AddressDetailsForm.controls['selectedCountry'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="AddressDetailsForm.controls['selectedCountry'].errors?.['required']">
+                                        Country is
+                                        required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="" class="form-label">State<span class="text-danger">*</span></label>
+                                <ng-select class="customselect" [clearable]="false" formControlName="selectedState"
+                                    name="state" (change)="onStateselect($event)" placeholder="Select Select"
+                                    [class.is-invalid]="AddressDetailsForm.controls['selectedState'].invalid && (AddressDetailsForm.controls['selectedState'].dirty || AddressDetailsForm.controls['selectedState'].touched)">
+                                    <ng-option value="">Select State</ng-option>
+                                    <ng-option *ngFor="let item  of StateList"
+                                        [value]="item.StateId">{{item.StateName}}</ng-option>
+                                </ng-select>
+                                <div *ngIf="AddressDetailsForm.controls['selectedState'].invalid && (AddressDetailsForm.controls['selectedState'].dirty || AddressDetailsForm.controls['selectedState'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="AddressDetailsForm.controls['selectedState'].errors?.['required']">State
+                                        is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="" class="form-label">City<span class="text-danger">*</span></label>
+                                <ng-select class="customselect" [clearable]="false" name="city"
+                                    formControlName="selectedCity" placeholder="Select City"
+                                    [class.is-invalid]="AddressDetailsForm.controls['selectedCity'].invalid && (AddressDetailsForm.controls['selectedCity'].dirty || AddressDetailsForm.controls['selectedCity'].touched)">
+                                    <ng-option value="">Select City</ng-option>
+                                    <ng-option *ngFor="let item of CityList"
+                                        [value]="item.CityId">{{item.CityName}}</ng-option>
+                                </ng-select>
+                                <div *ngIf="AddressDetailsForm.controls['selectedCity'].invalid && (AddressDetailsForm.controls['selectedCity'].dirty || AddressDetailsForm.controls['selectedCity'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="AddressDetailsForm.controls['selectedCity'].errors?.['required']">City
+                                        is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="catdsc" class="form-label">Address<span class="text-danger">*</span></label>
+                                <input appNospaceFirst type="text" class="form-control" id="catdsc" placeholder="Enter Address"
+                                    formControlName="Address"
+                                    [class.is-invalid]="AddressDetailsForm.controls['Address'].invalid && (AddressDetailsForm.controls['Address'].dirty || AddressDetailsForm.controls['Address'].touched)">
+                                <div *ngIf="AddressDetailsForm.controls['Address'].invalid && (AddressDetailsForm.controls['Address'].dirty || AddressDetailsForm.controls['Address'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="AddressDetailsForm.controls['Address'].errors?.['required']">Addrees is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="catdsc" class="form-label">Zip Code<span
+                                        class="text-danger">*</span></label>
+                                <input appNospaceFirst type="text" class="form-control" id="catdsc" placeholder="Enter Zip Code"
+                                    formControlName="ZipCode"
+                                    [class.is-invalid]="AddressDetailsForm.controls['ZipCode'].invalid && (AddressDetailsForm.controls['ZipCode'].dirty || AddressDetailsForm.controls['ZipCode'].touched)">
+                                <div *ngIf="AddressDetailsForm.controls['ZipCode'].invalid && (AddressDetailsForm.controls['ZipCode'].dirty || AddressDetailsForm.controls['ZipCode'].touched)"
+                                    class="text-danger">
+                                    <div *ngIf="AddressDetailsForm.controls['ZipCode'].errors?.['required']">Zip Code is
+                                        required
+                                    </div>
+                                    <div *ngIf="AddressDetailsForm.controls['ZipCode'].errors?.['pattern']">
+                                        Please enter a 6-digit zip code and only number allowed.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 inputboxes">
+                            <div class="form-group">
+                                <label for="IsPrimary" class="form-label">Status</label>
+                                <div class="multiradio d-flex align-items-center flex-wrap">
+                                    <label class="cust-chk-bx d-inline-block pl-3">
+                                        <input id="active" type="checkbox" autocomplete="off"
+                                            formControlName="isPrime">Is
+                                        Primary
+                                        <span class="cust-chkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 inputboxes text-center">
+                        <div class="form-group">
+
+                            <div>
+                                <a *ngIf="!isEdit" class="btn me-3" href="javascript:void(0);" (click)="AddAddress()">
+                                    <i class="sr-plus-icon"></i>
+                                    <span>Add New</span>
+                                </a>
+
+
+                                <a *ngIf="isEdit" class="btn me-3" href="javascript:void(0);" (click)="Save()">
+                                    <i class="sr-plus-icon"></i>
+
+                                    <span>Update</span>
+                                </a>
+                                <a class="btn me-3" href="javascript:void(0);" (click)="ResetAddress()">
+                                    <span>Reset</span>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                @if (addressData.length > 0){
+                <div class="datatablemain w-100 mb-3">
+                    <div class="table-responsive h-auto">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+
+                                    <th></th>
+
+                                    <th>Country</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th>Address</th>
+                                    <th>Zip Code</th>
+                                    <th>Is Primary</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of addressData let i=index">
+                                    <td>{{i+1}}</td>
+
+                                    <td> <a href="javascript:void(0);" (click)="editAddressData(data,data.CountryId)">
+                                            <i class="sr-edit-icon"></i>
+                                        </a>
+                                        <a href="javascript:void(0);">
+                                            <i class="sr-delete-icon" (click)="deleteAddressData(data)"></i>
+                                        </a>
+                                    </td>
+
+                                    <td>{{data.CountryName}}</td>
+                                    <td>{{data.StateName}}</td>
+                                    <td>{{data.CityName}}</td>
+                                    <td>{{data.Address}}</td>
+                                    <td>{{data.ZipCode}}</td>
+                                    @if(data.IsPrimary=='1' || data.IsPrimary==1){
+                                    <td>True</td>
+
+                                    }@else{
+                                    <td>False</td>
+
+                                    }
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="modal-footer">
+                @if(FormButton=='Save'){
+                <button type="button" class="btn btn-border px-4" (click)="ResetForm()">Reset</button>
+                }
+
+                <button type="button" class="btn px-4" (click)="OnSubmit()">{{FormButton}}</button>
+            </div>
+        </div>
+    </div>
+</form>
+<app-confirm-dialog></app-confirm-dialog>

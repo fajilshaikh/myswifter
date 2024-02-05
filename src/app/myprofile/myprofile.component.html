@@ -1,0 +1,116 @@
+<div class="tbutton_icongroup">
+    <div class="src-rest-topbtn justify-content-between mb-0">
+        <div class="page_name_title">
+            <h1>My Profile</h1>
+        </div>
+    </div>
+</div>
+
+<form [formGroup]="MyprofileForm">
+    <div class="mypropage">
+        <div class="profilebox d-flex align-items-end justify-content-between">
+            <div class="avatar-upload">
+                <div class="position-relative d-inline-block">
+                    <div class="avatar-preview">
+                        <div id="imagePreview" [style.backgroundImage]="imagePreviewStyle"></div>
+                    </div>
+                    <div class="avatar-edit">
+                        <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" formControlName="files"
+                            (change)="onFileSelected($event)">
+                        <label for="imageUpload"><i class="fa-solid fa-pencil"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profileinput">
+            <h3>Personal Information</h3>
+            <div class="row grid4input">
+                <div class="col-md-3 inputboxes">
+                    <div class="form-group">
+                        <label for="comnm" class="form-label">Name<span class="text-danger">*</span></label>
+                        <input type="text" id="comnm" placeholder="Enter First Name" class="form-control"
+                            formControlName="Name"
+                            [class.is-invalid]="MyprofileForm.controls['Name'].invalid && (MyprofileForm.controls['Name'].dirty || MyprofileForm.controls['Name'].touched)">
+                        <div *ngIf="MyprofileForm.controls['Name'].invalid && (MyprofileForm.controls['Name'].dirty || MyprofileForm.controls['Name'].touched)"
+                            class="text-danger">
+                            <div *ngIf="MyprofileForm.controls['Name'].errors?.['required']">Name is required</div>
+                            <div *ngIf="MyprofileForm.controls['Name'].errors?.['pattern']">Name is invalid</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 inputboxes">
+                    <div class="form-group">
+                        <label for="adrs" class="form-label">Mobile Number<span class="text-danger">*</span></label>
+                        <div class="row align-items-center g-0">
+                            <div class="phonebox col-auto">
+                                <ng-select class="customselect" [clearable]="false" formControlName="selectedpncode"
+                                    #selectedpncode (change)="onselectedpncode()" name="pncode">
+                                    <ng-option *ngFor="let pncode  of pncodes"
+                                        [value]="pncode.CountryId">+{{pncode.PhoneCode}}</ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="phoneboxinput col ps-3">
+                                <input type="text" class="form-control required OnlyNumber" name="mobile_c"
+                                    placeholder="Enter Phone Number" autocomplete="off" [maxlength]="12"
+                                    formControlName="Mobile" (keypress)="PressNumber($event)"
+                                    [class.is-invalid]="MyprofileForm.controls['Mobile'].invalid && (MyprofileForm.controls['Mobile'].dirty || MyprofileForm.controls['Mobile'].touched)">
+                            </div>
+                            <div *ngIf="MyprofileForm.controls['Mobile'].invalid && (MyprofileForm.controls['Mobile'].dirty || MyprofileForm.controls['Mobile'].touched)"
+                                class="text-danger">
+                                <div *ngIf="MyprofileForm.controls['Mobile'].errors?.['required']">Mobile no is required
+                                </div>
+                                <div *ngIf="MyprofileForm.controls['Mobile'].errors?.['pattern']">Mobile no is invalid
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 inputboxes">
+                    <div class="form-group">
+                        <label for="comnm" class="form-label">Email Id<span class="text-danger">*</span></label>
+                        <input type="text" id="comnm" placeholder="Enter Email Id" class="form-control"
+                            formControlName="Email"
+                            [class.is-invalid]="MyprofileForm.controls['Email'].invalid && (MyprofileForm.controls['Email'].dirty || MyprofileForm.controls['Email'].touched)">
+                        <div *ngIf="MyprofileForm.controls['Email'].invalid && (MyprofileForm.controls['Email'].dirty || MyprofileForm.controls['Email'].touched)"
+                            class="text-danger">
+                            <div *ngIf="MyprofileForm.controls['Email'].errors?.['required']">Email id is required</div>
+                            <div *ngIf="MyprofileForm.controls['Email'].errors?.['email']">Invalid Email Id</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 inputboxes">
+                    <div class="form-group">
+                        <label for="comnm" class="form-label">Address<span class="text-danger">*</span></label>
+                        <input type="text" id="comnm" placeholder="Enter Address" class="form-control"
+                            formControlName="Address"
+                            [class.is-invalid]="MyprofileForm.controls['Address'].invalid && (MyprofileForm.controls['Address'].dirty || MyprofileForm.controls['Address'].touched)">
+                        <div *ngIf="MyprofileForm.controls['Address'].invalid && (MyprofileForm.controls['Address'].dirty || MyprofileForm.controls['Address'].touched)"
+                            class="text-danger">
+                            <div *ngIf="MyprofileForm.controls['Address'].errors?.['required']">Address is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 inputboxes">
+                    <div class="form-group">
+                        <label for="comnm" class="form-label">ZIP Code<span class="text-danger">*</span></label>
+                        <input type="text" id="comnm" placeholder="Enter ZIP Code" class="form-control"
+                            formControlName="ZipCode" autocomplete="off" [maxlength]="6"
+                            (keypress)="PressNumber($event)"
+                            [class.is-invalid]="MyprofileForm.controls['ZipCode'].invalid && (MyprofileForm.controls['ZipCode'].dirty || MyprofileForm.controls['ZipCode'].touched)">
+                        <div *ngIf="MyprofileForm.controls['ZipCode'].invalid && (MyprofileForm.controls['ZipCode'].dirty || MyprofileForm.controls['ZipCode'].touched)"
+                            class="text-danger">
+                            <div *ngIf="MyprofileForm.controls['ZipCode'].errors?.['required']">Zip code is required
+                            </div>
+                            <div *ngIf="MyprofileForm.controls['ZipCode'].errors?.['pattern']">Invalid zip code</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-end">
+                <a class="btn px-4" href="javascript:void(0);" (click)="OnSubmit()">Update</a>
+            </div>
+        </div>
+    </div>
+</form>

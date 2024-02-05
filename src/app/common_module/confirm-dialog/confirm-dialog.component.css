@@ -1,0 +1,65 @@
+.modal .modal-body h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .modal .modal-body p {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(21, 25, 32, 0.50);
+  }
+  
+  .modal .datatablemain {
+    margin-top: 5px;
+  }
+  
+  /* .modal .modal-header {
+    border: none;
+    padding: 10px 20px;
+    border-bottom: 1px solid #DDD;
+  } */
+  
+  .modal .modal-body {
+    padding: 0px 24px 24px 24px;
+  }
+  
+  .modal .modal-body p:last-child {
+    margin-bottom: 0px;
+  }
+  
+  .modal .modal-footer .btn {
+    padding: 12px 30px;
+    border-radius: 12px;
+    margin: 0;
+  }
+  
+  .modal .modal-footer .btn {
+    border-radius: 6px;
+  }
+  
+  .modal {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* // `xxl` applies to x-large devices (large desktops, less than 1400px) */
+  @media (max-width: 1440.98px) {
+    .confirm-message {
+      font-size: 16px;
+    }
+  }
+  
+  /* // `xl` applies to large devices (desktops, less than 1200px) */
+  @media (max-width: 1199.98px) {}
+  
+  /* // `lg` applies to medium devices (tablets, less than 992px) */
+  @media (max-width: 991.98px) {}
+  
+  /* // `md` applies to small devices (landscape phones, less than 768px) */
+  @media (max-width: 767.98px) {}
+  
+  /* // `sm` applies to x-small devices (portrait phones, less than 576px) */
+  @media (max-width: 575.98px) {}
+  
+  /* // `xs` returns only a ruleset and no media query */
+  @media (max-width: 480.98px) {}

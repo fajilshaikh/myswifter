@@ -1,0 +1,6 @@
+.datatablemain .table thead tr th .placeholder,
+.datatablemain .table tbody tr td .placeholder {
+    width: 150px;
+    height: 20px;
+    background-color: #cbc7c7dd;
+}
